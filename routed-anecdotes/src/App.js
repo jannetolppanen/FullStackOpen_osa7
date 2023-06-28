@@ -118,7 +118,14 @@ const CreateNew = (props) => {
     props.setNotification(content.value)
     setTimeout(() => {
       props.setNotification('')
-    }, 5000);
+    }, 5000)
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    content.reset()
+    author.reset()
+    info.reset()
 
   }
 
@@ -144,8 +151,8 @@ const CreateNew = (props) => {
             {...info}
           />
         </div>
-        {content.value}
         <button>create</button>
+        <button onClick={handleReset}>reset</button>
       </form>
     </div>
   )
