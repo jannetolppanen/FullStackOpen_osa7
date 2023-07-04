@@ -1,24 +1,24 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 
 const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
-  const [title, setTitle] = useState('')
-  const [author, setAuthor] = useState('')
-  const [url, setUrl] = useState('')
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const newBlog = (event) => {
-    event.preventDefault()
-    handleCreateNewBlog()
+    event.preventDefault();
+    handleCreateNewBlog();
 
     const blogObject = {
       title: title,
       author: author,
       url: url,
-    }
-    addBlog(blogObject)
-    setTitle('')
-    setAuthor('')
-    setUrl('')
-  }
+    };
+    addBlog(blogObject);
+    setTitle("");
+    setAuthor("");
+    setUrl("");
+  };
 
   return (
     <>
@@ -27,11 +27,11 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
           <h2>create new</h2>
           title:
           <input
-            type='text'
+            type="text"
             value={title}
-            name='Title'
+            name="Title"
             data-testid="titleInput"
-            id='title-input'
+            id="title-input"
             onChange={({ target }) => setTitle(target.value)}
           />
         </div>
@@ -39,11 +39,11 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
         <div>
           author:
           <input
-            type='text'
+            type="text"
             value={author}
-            name='Author'
-            data-testid='authorInput'
-            id='author-input'
+            name="Author"
+            data-testid="authorInput"
+            id="author-input"
             onChange={({ target }) => setAuthor(target.value)}
           />
         </div>
@@ -51,21 +51,21 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
         <div>
           url:
           <input
-            type='text'
+            type="text"
             value={url}
-            name='Url'
-            data-testid='urlInput'
-            id='url-input'
+            name="Url"
+            data-testid="urlInput"
+            id="url-input"
             onChange={({ target }) => setUrl(target.value)}
           />
         </div>
 
-        <button type='submit' data-testid='submitButton' id='submit-button'>
+        <button type="submit" data-testid="submitButton" id="submit-button">
           create
         </button>
       </form>
     </>
-  )
-}
+  );
+};
 
-export default CreateBlogForm
+export default CreateBlogForm;
