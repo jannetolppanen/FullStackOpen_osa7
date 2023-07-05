@@ -1,10 +1,15 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  text: 'Sample',
+  text: '',
   style: {
-    color: 'red',
-    display: 'none',
+    backgroundColor: '#f8f8f8',
+    border: '1px solid grey',
+    borderRadius: '4px',
+    padding: '10px',
+    color: 'white',
+    fontSize: '24px',
+    display: 'none'
   },
 }
 
@@ -21,7 +26,7 @@ export const notificationSlice = createSlice({
         style: {
           ...state.style,
           display: 'block',
-          color: color
+          backgroundColor: color
         },
       }
       return updatedState
