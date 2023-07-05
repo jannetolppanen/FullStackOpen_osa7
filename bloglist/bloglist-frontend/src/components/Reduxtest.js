@@ -1,6 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { increment as incrementLeft, decrement as decrementLeft } from '../reducers/LeftCounterSlice'
 import { increment as incrementRight, decrement as decrementRight } from '../reducers/RightCounterSlice'
+import { create, remove } from '../reducers/NotificationSlice'
 
 
 
@@ -19,6 +20,13 @@ const Reduxtest = () => {
   const rightCounter = useSelector((state) => state.rightCounter.value)
   const dispatch = useDispatch()
 
+  const HandleNotification = () => {
+    dispatch(create())
+    setTimeout(() => {
+      dispatch(remove())
+    }, 5000);
+  }
+
 
 
   return (
@@ -35,6 +43,7 @@ const Reduxtest = () => {
         <button onClick={() =>dispatch(incrementRight())}>+</button>
         <button onClick={() =>dispatch(decrementRight())}>-</button>
       </div>
+      <button onClick={HandleNotification}>Notification</button>
     </>
   )
 }
