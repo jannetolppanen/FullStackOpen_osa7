@@ -1,24 +1,37 @@
-import React, { useState } from "react";
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { create, remove } from '../reducers/NotificationSlice'
 
 const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
+  const dispatch = useDispatch()
 
   const newBlog = (event) => {
-    event.preventDefault();
-    handleCreateNewBlog();
+    event.preventDefault()
+    // handleCreateNewBlog()
 
     const blogObject = {
       title: title,
       author: author,
       url: url,
-    };
-    addBlog(blogObject);
-    setTitle("");
-    setAuthor("");
-    setUrl("");
-  };
+    }
+    addBlog(blogObject)
+    setTitle('')
+    setAuthor('')
+    setUrl('')
+
+    dispatch(
+      create({
+        text: `${blogObject.title} by ${blogObject.author} added`,
+        color: "green"
+    })
+    )
+    setTimeout(() => {
+      dispatch(remove())
+    }, 5000)
+  }
 
   return (
     <>
@@ -65,7 +78,7 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
         </button>
       </form>
     </>
-  );
-};
+  )
+}
 
-export default CreateBlogForm;
+export default CreateBlogForm

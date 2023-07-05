@@ -77,9 +77,9 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      createNotificationMessage('Logged in user', 'green', username)
+      // createNotificationMessage('Logged in user', 'green', username)
     } catch (exception) {
-      createNotificationMessage('wrong username or password', 'red')
+      // createNotificationMessage('wrong username or password', 'red')
     }
   }
 
@@ -94,10 +94,10 @@ const App = () => {
         setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)))
       })
       .catch(() => {
-        createNotificationMessage(
-          'Blog was already removed from the server',
-          'red'
-        )
+        // createNotificationMessage(
+        //   'Blog was already removed from the server',
+        //   'red'
+        // )
         setBlogs(blogs.filter((b) => b.id !== id))
       })
   }
@@ -106,16 +106,16 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       await blogService.create(blogObject)
-      createNotificationMessage(
-        `blogpost ${blogObject.title} by ${blogObject.author} added`,
-        'green'
-      )
+      // createNotificationMessage(
+      //   `blogpost ${blogObject.title} by ${blogObject.author} added`,
+      //   'green'
+      // )
 
       const blogs = await blogService.getAll()
       setBlogs(blogs)
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        createNotificationMessage('Error: Bad Request', 'red')
+        // createNotificationMessage('Error: Bad Request', 'red')
       }
     }
   }

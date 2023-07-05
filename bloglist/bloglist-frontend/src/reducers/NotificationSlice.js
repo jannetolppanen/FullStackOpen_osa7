@@ -13,27 +13,21 @@ export const notificationSlice = createSlice({
   initialState,
   reducers: {
     create: (state, action) => {
-      console.log('create triggered');
+      const { text, color } = action.payload
 
       const updatedState = state = {
         ...state,
+        text: text,
         style: {
           ...state.style,
           display: 'block',
+          color: color
         },
       }
       return updatedState
     },
     remove: (state, action) => {
-      console.log('remove triggered');
-      const updatedState = state = {
-        ...state,
-        style: {
-          ...state.style,
-          display: 'none',
-        },
-      }
-      return updatedState
+      return initialState
     }
   },
 })
