@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useDispatch } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Logoutbutton from './components/LogoutButton'
@@ -6,20 +7,17 @@ import CreateBlogForm from './components/CreateBlogForm'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
-
-import ActionMessage from './components/ActionMessage'
+import { create, remove } from './reducers/NotificationSlice'
 import NotificationMessage from './components/NotificationMessage'
 import Reduxtest from './components/Reduxtest'
+
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
-  const [TextAndCss, setTextAndCss] = useState({
-    text: '',
-    css: '',
-  })
+  const dispatch = useDispatch()
 
   // Retrieves blogs on the first page load
   useEffect(() => {
@@ -38,6 +36,15 @@ const App = () => {
   // Empties login info from localStorage and removes user
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(
+      create({
+        text: `Logged out succesfully`,
+        color: "grey"
+    })
+    )
+    setTimeout(() => {
+      dispatch(remove())
+    }, 5000)
     setUser(null)
   }
 
@@ -46,20 +53,6 @@ const App = () => {
   // Closes blog creation form when new blog is submitted using blogFormRef
   const handleCreateNewBlog = () => {
     blogFormRef.current.toggleVisibility()
-  }
-
-  // Creates config for notification messages
-  const createNotificationMessage = (text, color, name) => {
-    setTextAndCss({
-      text: `${text} ${name || ''}`,
-      css: color,
-    })
-    setTimeout(() => {
-      setTextAndCss({
-        text: '',
-        css: '',
-      })
-    }, 5000)
   }
 
   // Login handler
@@ -77,9 +70,25 @@ const App = () => {
       setUser(user)
       setUsername('')
       setPassword('')
-      // createNotificationMessage('Logged in user', 'green', username)
+      dispatch(
+        create({
+          text: `Logged in user ${username}`,
+          color: "blue"
+      })
+      )
+      setTimeout(() => {
+        dispatch(remove())
+      }, 5000)
     } catch (exception) {
-      // createNotificationMessage('wrong username or password', 'red')
+      dispatch(
+        create({
+          text: 'wrong username or password',
+          color: "red"
+      })
+      )
+      setTimeout(() => {
+        dispatch(remove())
+      }, 5000)
     }
   }
 
@@ -94,10 +103,15 @@ const App = () => {
         setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)))
       })
       .catch(() => {
-        // createNotificationMessage(
-        //   'Blog was already removed from the server',
-        //   'red'
-        // )
+        dispatch(
+          create({
+            text: 'Blog was already removed from server',
+            color: "red"
+        })
+        )
+        setTimeout(() => {
+          dispatch(remove())
+        }, 5000)
         setBlogs(blogs.filter((b) => b.id !== id))
       })
   }
@@ -106,25 +120,28 @@ const App = () => {
   const addBlog = async (blogObject) => {
     try {
       await blogService.create(blogObject)
-      // createNotificationMessage(
-      //   `blogpost ${blogObject.title} by ${blogObject.author} added`,
-      //   'green'
-      // )
 
       const blogs = await blogService.getAll()
       setBlogs(blogs)
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        // createNotificationMessage('Error: Bad Request', 'red')
+        dispatch(
+          create({
+            text: 'Error, bad request',
+            color: "red"
+        })
+        )
+        setTimeout(() => {
+          dispatch(remove())
+        }, 5000)
       }
     }
   }
 
   return (
     <div>
-      <Reduxtest />
+      {/* <Reduxtest /> */}
       <NotificationMessage />
-      <ActionMessage message={TextAndCss} />
 
       {!user && (
         <LoginForm
@@ -150,7 +167,6 @@ const App = () => {
               handleCreateNewBlog={handleCreateNewBlog}
               blogs={blogs}
               setBlogs={setBlogs}
-              createNotificationMessage={createNotificationMessage}
               addBlog={addBlog}
             />
           </Togglable>
