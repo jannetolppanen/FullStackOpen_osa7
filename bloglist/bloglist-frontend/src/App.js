@@ -8,6 +8,7 @@ import blogService from "./services/blogs";
 import loginService from "./services/login";
 
 import ActionMessage from "./components/ActionMessage";
+import Reduxtest from "./components/Reduxtest";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -120,6 +121,7 @@ const App = () => {
 
   return (
     <div>
+      <Reduxtest />
       <ActionMessage message={TextAndCss} />
 
       {!user && (
