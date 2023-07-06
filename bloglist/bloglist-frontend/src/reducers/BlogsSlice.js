@@ -8,7 +8,8 @@ const BlogsSlice = createSlice({
   reducers: {
     setAllBlogs: (state, action) => {
       const fetchedBlogs = action.payload
-      return fetchedBlogs
+      const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes)
+      return sortedBlogs
     },
   },
 })

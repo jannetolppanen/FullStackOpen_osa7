@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Logoutbutton from './components/LogoutButton'
@@ -12,6 +11,7 @@ import { create, remove } from './reducers/NotificationSlice'
 import { setAllBlogs } from './reducers/BlogsSlice'
 import NotificationMessage from './components/NotificationMessage'
 import Reduxtest from './components/Reduxtest'
+import BlogRedux from './components/BlogRedux'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -19,22 +19,21 @@ const App = () => {
   const [blogs, setBlogs] = useState([])
   const [user, setUser] = useState(null)
   const dispatch = useDispatch()
+  const blogsFromRedux = useSelector((state) => state.blogs)
 
   // Retrieves blogs on the first page load and puts them in useState
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
+  console.log('blogsfrom usestate: ', blogs)
 
-  console.log('blogs from useState', blogs);
+  // Retrieves blogs on the first page load and puts them in redux
+  useEffect(() => {
+    blogService.getAll().then((blogs) => dispatch(setAllBlogs(blogs)))
+  }, [])
 
-    // Retrieves blogs on the first page load and puts them in redux
-    useEffect(() => {
-      blogService.getAll()
-      .then((blogs) => dispatch(setAllBlogs(blogs)))
-    }, [])
-
-    const reduxBlogs = useSelector(state => state.blogs)
-    console.log('blogs from redux: ', reduxBlogs );
+  const reduxBlogs = useSelector((state) => state.blogs)
+  console.log('blogs from redux: ',reduxBlogs)
 
   // Checks if localStorage already has login info
   useEffect(() => {
@@ -153,6 +152,7 @@ const App = () => {
   return (
     <div>
       {/* <Reduxtest /> */}
+
       <NotificationMessage />
 
       {!user && (
@@ -182,6 +182,7 @@ const App = () => {
               {user.name} logged in <Logoutbutton onLogout={handleLogout} />
             </p>
           }
+          
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
             <CreateBlogForm
               handleCreateNewBlog={handleCreateNewBlog}
@@ -190,7 +191,8 @@ const App = () => {
               addBlog={addBlog}
             />
           </Togglable>
-          {blogs
+
+          {/* {blogs
             .sort((a, b) => b.likes - a.likes)
             .map((blog) => (
               <Blog
@@ -201,7 +203,21 @@ const App = () => {
                 user={user}
                 addLike={addLike}
               />
+            ))} */}
+
+          {blogsFromRedux
+            // .sort((a, b) => b.likes - a.likes)
+            .map((blog) => (
+              <BlogRedux
+                key={blog.id}
+                blog={blog}
+                // blogs={blogsFromRedux}
+                // setBlogs={setBlogs}
+                user={user}
+                addLike={addLike}
+              />
             ))}
+
         </div>
       )}
     </div>
