@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Logoutbutton from './components/LogoutButton'
@@ -8,9 +9,9 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { create, remove } from './reducers/NotificationSlice'
+import { setAllBlogs } from './reducers/BlogsSlice'
 import NotificationMessage from './components/NotificationMessage'
 import Reduxtest from './components/Reduxtest'
-
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -19,10 +20,21 @@ const App = () => {
   const [user, setUser] = useState(null)
   const dispatch = useDispatch()
 
-  // Retrieves blogs on the first page load
+  // Retrieves blogs on the first page load and puts them in useState
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
+
+  console.log('blogs from useState', blogs);
+
+    // Retrieves blogs on the first page load and puts them in redux
+    useEffect(() => {
+      blogService.getAll()
+      .then((blogs) => dispatch(setAllBlogs(blogs)))
+    }, [])
+
+    const reduxBlogs = useSelector(state => state.blogs)
+    console.log('blogs from redux: ', reduxBlogs );
 
   // Checks if localStorage already has login info
   useEffect(() => {
@@ -39,8 +51,8 @@ const App = () => {
     dispatch(
       create({
         text: `Logged out succesfully`,
-        color: "grey"
-    })
+        color: 'grey',
+      })
     )
     setTimeout(() => {
       dispatch(remove())
@@ -73,8 +85,8 @@ const App = () => {
       dispatch(
         create({
           text: `Logged in user ${username}`,
-          color: "blue"
-      })
+          color: 'blue',
+        })
       )
       setTimeout(() => {
         dispatch(remove())
@@ -83,8 +95,8 @@ const App = () => {
       dispatch(
         create({
           text: 'wrong username or password',
-          color: "red"
-      })
+          color: 'red',
+        })
       )
       setTimeout(() => {
         dispatch(remove())
@@ -106,8 +118,8 @@ const App = () => {
         dispatch(
           create({
             text: 'Blog was already removed from server',
-            color: "red"
-        })
+            color: 'red',
+          })
         )
         setTimeout(() => {
           dispatch(remove())
@@ -128,8 +140,8 @@ const App = () => {
         dispatch(
           create({
             text: 'Error, bad request',
-            color: "red"
-        })
+            color: 'red',
+          })
         )
         setTimeout(() => {
           dispatch(remove())
@@ -156,12 +168,20 @@ const App = () => {
       {user && (
         <div>
           <h2>blogs</h2>
+          <p
+            style={{
+              backgroundColor: 'green',
+              padding: '10px',
+              color: 'white',
+            }}
+          >
+            Remember this is a new branch and needs to be merged if it works
+          </p>{' '}
           {
             <p>
               {user.name} logged in <Logoutbutton onLogout={handleLogout} />
             </p>
           }
-
           <Togglable buttonLabel="create new blog" ref={blogFormRef}>
             <CreateBlogForm
               handleCreateNewBlog={handleCreateNewBlog}
