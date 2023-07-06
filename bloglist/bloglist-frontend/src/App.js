@@ -4,11 +4,12 @@ import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Logoutbutton from './components/LogoutButton'
 import CreateBlogForm from './components/CreateBlogForm'
+import CreateBlogFormRedux from './components/CreateBlogFormRedux'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { create, remove } from './reducers/NotificationSlice'
-import { setAllBlogs } from './reducers/BlogsSlice'
+import { setAllBlogs, createNewBlog } from './reducers/BlogsSlice'
 import NotificationMessage from './components/NotificationMessage'
 import Reduxtest from './components/Reduxtest'
 import BlogRedux from './components/BlogRedux'
@@ -25,7 +26,6 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then((blogs) => setBlogs(blogs))
   }, [])
-  console.log('blogsfrom usestate: ', blogs)
 
   // Retrieves blogs on the first page load and puts them in redux
   useEffect(() => {
@@ -33,7 +33,6 @@ const App = () => {
   }, [])
 
   const reduxBlogs = useSelector((state) => state.blogs)
-  console.log('blogs from redux: ',reduxBlogs)
 
   // Checks if localStorage already has login info
   useEffect(() => {
@@ -127,7 +126,7 @@ const App = () => {
       })
   }
 
-  // Adds new blogs
+  // Adds new blogs to useState
   const addBlog = async (blogObject) => {
     try {
       await blogService.create(blogObject)
@@ -148,6 +147,28 @@ const App = () => {
       }
     }
   }
+
+    // Adds new blogs to redux
+    const addBlogRedux = async (blogObject) => {
+      try {
+        dispatch(createNewBlog(blogObject))
+        await blogService.create(blogObject)
+  
+        // const blogs = await blogService.getAll()
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          dispatch(
+            create({
+              text: 'Error, bad request',
+              color: 'red',
+            })
+          )
+          setTimeout(() => {
+            dispatch(remove())
+          }, 5000)
+        }
+      }
+    }
 
   return (
     <div>
@@ -189,6 +210,15 @@ const App = () => {
               blogs={blogs}
               setBlogs={setBlogs}
               addBlog={addBlog}
+            />
+          </Togglable>
+
+          <Togglable buttonLabel="create new blog redux" ref={blogFormRef}>
+            <CreateBlogFormRedux
+              handleCreateNewBlog={handleCreateNewBlog}
+              blogs={blogs}
+              setBlogs={setBlogs}
+              addBlogRedux={addBlogRedux}
             />
           </Togglable>
 

@@ -11,9 +11,14 @@ const BlogsSlice = createSlice({
       const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes)
       return sortedBlogs
     },
+    createNewBlog: (state, action) => {
+      const newBlog = action.payload
+      const newState = [...state, newBlog]
+      return newState
+    }
   },
 })
 
-export const { setAllBlogs } = BlogsSlice.actions
+export const { setAllBlogs, createNewBlog } = BlogsSlice.actions
 
 export default BlogsSlice.reducer
