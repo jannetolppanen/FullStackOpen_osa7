@@ -150,11 +150,10 @@ const App = () => {
     // Adds new blogs to redux
     const addBlogRedux = async (blogObject) => {
       try {
-        await blogService.create(blogObject)
-        dispatch(createNewBlog(blogObject))
-        dispatch(setAllBlogs(await blogService.getAll()))
-  
-        // const blogs = await blogService.getAll()
+        blogService.create(blogObject)
+        .then(result => {
+          dispatch(createNewBlog(result))
+        })
       } catch (error) {
         if (error.response && error.response.status === 400) {
           dispatch(
@@ -237,7 +236,8 @@ const App = () => {
 
           {blogsFromRedux
             // .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
+            .map((blog, index) => (
+              //added index here so react wont complain about a missing key
               <BlogRedux
                 key={blog.id}
                 blog={blog}
