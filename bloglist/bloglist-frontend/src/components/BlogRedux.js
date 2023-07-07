@@ -1,58 +1,71 @@
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { addLike } from "../reducers/BlogsSlice";
-import blogService from "../services/blogs";
+import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addLike } from '../reducers/BlogsSlice'
+import blogService from '../services/blogs'
 
-const BlogRedux = ({ blog, setBlogs, user }) => {
-  const [visible, setVisible] = useState(false);
+const BlogRedux = ({ blog, user }) => {
+  const [visible, setVisible] = useState(false)
   const dispatch = useDispatch()
 
   // Blog css style
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: "solid",
+    border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-    backgroundColor: "lightblue",
-  };
+    backgroundColor: 'lightblue',
+  }
 
   const removeButtonStyle = {
-    backgroundColor: "red",
-  };
+    backgroundColor: 'red',
+  }
 
   // returns true if blogpost belongs to logged in user
   const isBlogPostOwner = () => {
     if (!user) {
-      return false;
+      return false
     }
-    return blog.user.username === user.username;
-  };
+    return blog.user.username === user.username
+  }
 
   // Handles remove button clicks
   const handleRemove = () => {
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      removeBlogPost(blog.id);
+      removeBlogPost(blog.id)
     }
-  };
+  }
 
   // Removes blogpost
   const removeBlogPost = (id) => {
     blogService.remove(id, user.token).then(() => {
-      setBlogs(blogs.filter((blog) => blog.id !== id));
-    });
-  };
+      setBlogs(blogs.filter((blog) => blog.id !== id))
+    })
+  }
 
   // Toggle fullinfo visibility
   const handleView = () => {
-    setVisible(!visible);
-  };
+    setVisible(!visible)
+  }
 
   // Add like
   const handleLike = () => {
     const { id } = blog
-    const blogToUpdate = {...blog, likes: blog.likes +1}
-    dispatch(addLike({ id, blogToUpdate }))
+    const blogToUpdate = { ...blog, likes: blog.likes + 1 }
+
+    blogService
+      .update(id, blogToUpdate)
+      .then(() => {
+        dispatch(addLike({ id, blogToUpdate }))
+      })
+      .catch(() => {
+        dispatch(
+          create({ text: 'Blog was already removed from server', color: 'red' })
+        )
+        setTimeout(() => {
+          dispatch(remove())
+        }, 5000)
+      })
   }
 
   // Shows more info about the blog
@@ -61,10 +74,10 @@ const BlogRedux = ({ blog, setBlogs, user }) => {
       <>
         {blog.url}
         <br />
-        likes {blog.likes}{" "}
+        likes {blog.likes}{' '}
         <button onClick={handleLike} id="like-button">
           like
-        </button>{" "}
+        </button>{' '}
         <br />
         {blog.user.name}
         <br />
@@ -78,19 +91,19 @@ const BlogRedux = ({ blog, setBlogs, user }) => {
           </button>
         )}
       </>
-    );
-  };
+    )
+  }
 
   return (
     <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}{" "}
+      {blog.title} {blog.author}{' '}
       <button onClick={handleView} id="view-button">
         view
-      </button>{" "}
+      </button>{' '}
       <br />
       {visible && fullInfo()}
     </div>
-  );
-};
+  )
+}
 
-export default BlogRedux;
+export default BlogRedux

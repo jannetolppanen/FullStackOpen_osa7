@@ -100,53 +100,6 @@ const App = () => {
     }
   }
 
-  // Add like to blogpost with certain id usestate
-  const addLike = (id) => {
-    const blogObject = blogs.find((b) => b.id === id)
-    const changedBlog = { ...blogObject, likes: blogObject.likes + 1 }
-
-    blogService
-      .update(id, changedBlog)
-      .then(() => {
-        setBlogs(blogs.map((blog) => (blog.id !== id ? blog : changedBlog)))
-      })
-      .catch(() => {
-        dispatch(
-          create({
-            text: 'Blog was already removed from server',
-            color: 'red',
-          })
-        )
-        setTimeout(() => {
-          dispatch(remove())
-        }, 5000)
-        setBlogs(blogs.filter((b) => b.id !== id))
-      })
-  }
-
-
-  // Adds new blogs to useState
-  const addBlog = async (blogObject) => {
-    try {
-      await blogService.create(blogObject)
-
-      const blogs = await blogService.getAll()
-      setBlogs(blogs)
-    } catch (error) {
-      if (error.response && error.response.status === 400) {
-        dispatch(
-          create({
-            text: 'Error, bad request',
-            color: 'red',
-          })
-        )
-        setTimeout(() => {
-          dispatch(remove())
-        }, 5000)
-      }
-    }
-  }
-
     // Adds new blogs to redux
     const addBlogRedux = async (blogObject) => {
       try {
@@ -171,8 +124,6 @@ const App = () => {
 
   return (
     <div>
-      {/* <Reduxtest /> */}
-
       <NotificationMessage />
 
       {!user && (
@@ -203,14 +154,6 @@ const App = () => {
             </p>
           }
           
-          <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-            <CreateBlogForm
-              handleCreateNewBlog={handleCreateNewBlog}
-              blogs={blogs}
-              setBlogs={setBlogs}
-              addBlog={addBlog}
-            />
-          </Togglable>
 
           <Togglable buttonLabel="create new blog redux" ref={blogFormRef}>
             <CreateBlogFormRedux
@@ -221,30 +164,13 @@ const App = () => {
             />
           </Togglable>
 
-          {/* {blogs
-            .sort((a, b) => b.likes - a.likes)
-            .map((blog) => (
-              <Blog
-                key={blog.id}
-                blog={blog}
-                blogs={blogs}
-                setBlogs={setBlogs}
-                user={user}
-                addLike={addLike}
-              />
-            ))} */}
-
           {blogsFromRedux
-            // .sort((a, b) => b.likes - a.likes)
-            .map((blog, index) => (
-              //added index here so react wont complain about a missing key
+            .map((blog) => (
               <BlogRedux
                 key={blog.id}
                 blog={blog}
                 blogs={blogsFromRedux}
-                setBlogs={setBlogs}
                 user={user}
-                addLike={addLike}
               />
             ))}
 

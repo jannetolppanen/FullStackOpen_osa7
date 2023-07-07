@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { create, remove } from '../reducers/NotificationSlice'
 
-const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
+const CreateBlogForm = ({ handleCreateNewBlog, addBlogRedux }) => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -17,7 +17,7 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlog }) => {
       author: author,
       url: url,
     }
-    addBlog(blogObject)
+    addBlogRedux(blogObject)
     setTitle('')
     setAuthor('')
     setUrl('')
