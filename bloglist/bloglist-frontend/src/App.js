@@ -32,8 +32,6 @@ const App = () => {
     blogService.getAll().then((blogs) => dispatch(setAllBlogs(blogs)))
   }, [])
 
-  const reduxBlogs = useSelector((state) => state.blogs)
-
   // Checks if localStorage already has login info
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -102,7 +100,7 @@ const App = () => {
     }
   }
 
-  // Add like to blogpost with certain id
+  // Add like to blogpost with certain id usestate
   const addLike = (id) => {
     const blogObject = blogs.find((b) => b.id === id)
     const changedBlog = { ...blogObject, likes: blogObject.likes + 1 }
@@ -125,6 +123,7 @@ const App = () => {
         setBlogs(blogs.filter((b) => b.id !== id))
       })
   }
+
 
   // Adds new blogs to useState
   const addBlog = async (blogObject) => {
@@ -151,8 +150,9 @@ const App = () => {
     // Adds new blogs to redux
     const addBlogRedux = async (blogObject) => {
       try {
-        dispatch(createNewBlog(blogObject))
         await blogService.create(blogObject)
+        dispatch(createNewBlog(blogObject))
+        dispatch(setAllBlogs(await blogService.getAll()))
   
         // const blogs = await blogService.getAll()
       } catch (error) {
@@ -241,8 +241,8 @@ const App = () => {
               <BlogRedux
                 key={blog.id}
                 blog={blog}
-                // blogs={blogsFromRedux}
-                // setBlogs={setBlogs}
+                blogs={blogsFromRedux}
+                setBlogs={setBlogs}
                 user={user}
                 addLike={addLike}
               />

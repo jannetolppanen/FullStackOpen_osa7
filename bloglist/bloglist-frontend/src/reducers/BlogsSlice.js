@@ -9,7 +9,8 @@ const BlogsSlice = createSlice({
     setAllBlogs: (state, action) => {
       const fetchedBlogs = action.payload
       const sortedBlogs = fetchedBlogs.sort((a, b) => b.likes - a.likes)
-      return sortedBlogs
+      // returns fetched blogs as a test, does not sort. this needs to be fixed. just need to figure out why it complains about keys
+      return fetchedBlogs
     },
     createNewBlog: (state, action) => {
       const newBlog = action.payload
