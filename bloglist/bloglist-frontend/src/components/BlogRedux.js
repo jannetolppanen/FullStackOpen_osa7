@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addLike } from "../reducers/BlogsSlice";
 import blogService from "../services/blogs";
 
-const BlogRedux = ({ blog, setBlogs, user, addLike }) => {
+const BlogRedux = ({ blog, setBlogs, user }) => {
   const [visible, setVisible] = useState(false);
+  const dispatch = useDispatch()
 
   // Blog css style
   const blogStyle = {
@@ -45,6 +48,13 @@ const BlogRedux = ({ blog, setBlogs, user, addLike }) => {
     setVisible(!visible);
   };
 
+  // Add like
+  const handleLike = () => {
+    const { id } = blog
+    const blogToUpdate = {...blog, likes: blog.likes +1}
+    dispatch(addLike({ id, blogToUpdate }))
+  }
+
   // Shows more info about the blog
   const fullInfo = () => {
     return (
@@ -52,7 +62,7 @@ const BlogRedux = ({ blog, setBlogs, user, addLike }) => {
         {blog.url}
         <br />
         likes {blog.likes}{" "}
-        <button onClick={() => addLike(blog.id)} id="like-button">
+        <button onClick={handleLike} id="like-button">
           like
         </button>{" "}
         <br />

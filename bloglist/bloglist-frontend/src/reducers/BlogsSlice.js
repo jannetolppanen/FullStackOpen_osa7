@@ -16,8 +16,11 @@ const BlogsSlice = createSlice({
       const newState = [...state, newBlog]
       return newState
     },
-    addlike: (state, action) => {
-      //
+    addLike: (state, action) => {
+      const { id, blogToUpdate } = action.payload
+      const updatedState = state.map((blog) => (blog.id !== id ? blog : blogToUpdate))
+      const sortedState = updatedState.sort((a, b) => b.likes - a.likes)
+      return sortedState
     },
     removeBlog: (state, action) => {
       //
@@ -25,7 +28,7 @@ const BlogsSlice = createSlice({
   },
 })
 
-export const { setAllBlogs, createNewBlog, addlike, removeBlog } = BlogsSlice.actions
+export const { setAllBlogs, createNewBlog, addLike, removeBlog } = BlogsSlice.actions
 
 export default BlogsSlice.reducer
 
