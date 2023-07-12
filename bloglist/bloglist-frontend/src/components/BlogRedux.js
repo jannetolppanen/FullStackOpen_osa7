@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { addLike } from '../reducers/BlogsSlice'
+import { addLike, removeBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 
 const BlogRedux = ({ blog, user }) => {
@@ -39,7 +39,8 @@ const BlogRedux = ({ blog, user }) => {
   // Removes blogpost
   const removeBlogPost = (id) => {
     blogService.remove(id, user.token).then(() => {
-      setBlogs(blogs.filter((blog) => blog.id !== id))
+      // setBlogs(blogs.filter((blog) => blog.id !== id))
+      dispatch(removeBlog({id}))
     })
   }
 

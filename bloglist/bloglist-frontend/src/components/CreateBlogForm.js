@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { create, remove } from '../reducers/NotificationSlice'
+import blogService from '../services/blogs'
 
 const CreateBlogForm = ({ handleCreateNewBlog, addBlogRedux }) => {
   const [title, setTitle] = useState('')
@@ -10,27 +11,42 @@ const CreateBlogForm = ({ handleCreateNewBlog, addBlogRedux }) => {
 
   const newBlog = (event) => {
     event.preventDefault()
-    // handleCreateNewBlog()
 
     const blogObject = {
       title: title,
       author: author,
       url: url,
     }
-    addBlogRedux(blogObject)
+    // addBlogRedux(blogObject)
+    try {
+      blogService.create(blogObject).then((result) => {
+        dispatch(createNewBlog(result))
+        dispatch(
+          create({
+            text: `${blogObject.title} by ${blogObject.author} added`,
+            color: 'green',
+          })
+        )
+        setTimeout(() => {
+          dispatch(remove())
+        }, 5000)
+      })
+    } catch (error) {
+      if (error.response && error.response.status === 400 || error.response.status === 401) {
+        dispatch(
+          create({
+            text: 'Error, bad request',
+            color: 'red',
+          })
+        )
+        setTimeout(() => {
+          dispatch(remove())
+        }, 5000)
+      }
+    }
     setTitle('')
     setAuthor('')
     setUrl('')
-
-    dispatch(
-      create({
-        text: `${blogObject.title} by ${blogObject.author} added`,
-        color: "green"
-    })
-    )
-    setTimeout(() => {
-      dispatch(remove())
-    }, 5000)
   }
 
   return (

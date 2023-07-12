@@ -23,7 +23,9 @@ const BlogsSlice = createSlice({
       return sortedState
     },
     removeBlog: (state, action) => {
-      //
+      const { id } = action.payload
+      const newState = state.filter((blog) => blog.id !== id )
+      return newState
     }
   },
 })
