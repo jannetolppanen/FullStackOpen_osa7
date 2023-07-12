@@ -1,31 +1,23 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Logoutbutton from './components/LogoutButton'
-import CreateBlogForm from './components/CreateBlogForm'
 import CreateBlogFormRedux from './components/CreateBlogFormRedux'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { create, remove } from './reducers/NotificationSlice'
+import { login, logout } from './reducers/UserSlice'
 import { setAllBlogs, createNewBlog } from './reducers/BlogsSlice'
 import NotificationMessage from './components/NotificationMessage'
-import Reduxtest from './components/Reduxtest'
 import BlogRedux from './components/BlogRedux'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [blogs, setBlogs] = useState([])
-  const [user, setUser] = useState(null)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
   const blogsFromRedux = useSelector((state) => state.blogs)
-
-  // Retrieves blogs on the first page load and puts them in useState
-  useEffect(() => {
-    blogService.getAll().then((blogs) => setBlogs(blogs))
-  }, [])
 
   // Retrieves blogs on the first page load and puts them in redux
   useEffect(() => {
@@ -37,13 +29,15 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      blogService.setToken(user.token)
+      dispatch(login(user))
     }
   }, [])
 
   // Empties login info from localStorage and removes user
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
+    dispatch(logout())
     dispatch(
       create({
         text: `Logged out succesfully`,
@@ -53,7 +47,6 @@ const App = () => {
     setTimeout(() => {
       dispatch(remove())
     }, 5000)
-    setUser(null)
   }
 
   // Reference to Togglable
@@ -75,7 +68,7 @@ const App = () => {
 
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(user))
       blogService.setToken(user.token)
-      setUser(user)
+      dispatch(login(user))
       setUsername('')
       setPassword('')
       dispatch(
@@ -106,7 +99,7 @@ const App = () => {
         blogService.create(blogObject)
         .then(result => {
           dispatch(createNewBlog(result))
-        })
+        })        
       } catch (error) {
         if (error.response && error.response.status === 400) {
           dispatch(
@@ -153,13 +146,12 @@ const App = () => {
               {user.name} logged in <Logoutbutton onLogout={handleLogout} />
             </p>
           }
-          
+
 
           <Togglable buttonLabel="create new blog redux" ref={blogFormRef}>
             <CreateBlogFormRedux
               handleCreateNewBlog={handleCreateNewBlog}
-              blogs={blogs}
-              setBlogs={setBlogs}
+              blogs={blogsFromRedux}
               addBlogRedux={addBlogRedux}
             />
           </Togglable>
@@ -170,7 +162,6 @@ const App = () => {
                 key={blog.id}
                 blog={blog}
                 blogs={blogsFromRedux}
-                user={user}
               />
             ))}
 

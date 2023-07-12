@@ -1,10 +1,11 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addLike, removeBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 
-const BlogRedux = ({ blog, user }) => {
+const BlogRedux = ({ blog }) => {
   const [visible, setVisible] = useState(false)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   // Blog css style
