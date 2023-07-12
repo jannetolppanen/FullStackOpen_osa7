@@ -98,6 +98,7 @@ const App = () => {
       try {
         blogService.create(blogObject)
         .then(result => {
+          console.log('result: ',result)
           dispatch(createNewBlog(result))
         })        
       } catch (error) {
