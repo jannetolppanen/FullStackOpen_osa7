@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { addLike, removeBlog } from '../reducers/BlogsSlice'
+import { addLike, removeBlog, addComment } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 import { useParams, useNavigate } from 'react-router-dom'
 
 const Blog = () => {
   const [visible, setVisible] = useState(false)
   const user = useSelector(state => state.login)
+  const [comment, SetComment] = useState('')
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -78,6 +79,19 @@ const Blog = () => {
       })
   }
 
+  const handleCommentChange = (e) => {
+    SetComment(e.target.value)
+  }
+
+  const submitComment = async (e) => {
+    e.preventDefault()
+    const id = blog.id
+    const payload = {content: comment}
+    await blogService.comment(id, payload)
+    dispatch(addComment({ id, comment}))
+    SetComment('')
+  }
+
 
 if (!blog) {
   return null
@@ -86,7 +100,7 @@ if (!blog) {
   return (
     <div className="blog">
       <h2>{blog.title} {blog.author}</h2>
-      {blog.url}
+      <a href={blog.url}>{blog.url}</a>
         <br />
         likes {blog.likes}{' '}
         <button onClick={handleLike} id="like-button">
@@ -106,10 +120,17 @@ if (!blog) {
         )}
         <h2>comments</h2>
         <ul>
-        {blog.comments.map((comment) => (
-          <li key={comment._id}>{comment.content}</li>
+        {blog.comments.map((comment, index) => (
+          <li key={index}>{comment.content}</li>
         ))}
         </ul>
+
+        <form onSubmit={submitComment}>
+          <input type="text" value={comment} onChange={handleCommentChange} placeholder='Give a comment' />
+          <button type='submit'>add comment</button>
+        </form>
+
+
 
 
     </div>

@@ -26,6 +26,11 @@ const update = (id, newObject) => {
   return request.then((response) => response.data);
 };
 
+const comment = (id, newObject) => {
+  const request = axios.post(`${baseUrl}/${id}/comments`, newObject)
+  return request.then((response) => response.data)
+}
+
 const remove = async (id, token) => {
   const config = {
     headers: { Authorization: `Bearer ${token}` },
@@ -34,4 +39,4 @@ const remove = async (id, token) => {
   return response.data;
 };
 
-export default { getAll, create, update, remove, setToken };
+export default { getAll, create, update, remove, comment, setToken };
