@@ -9,8 +9,8 @@ const Users = () => {
       <table>
         <thead>
           <tr>
-          <th></th>
-          <th>blogs created</th>
+            <th></th>
+            <th>blogs created</th>
           </tr>
         </thead>
         <tbody>

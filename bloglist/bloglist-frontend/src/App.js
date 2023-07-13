@@ -11,12 +11,23 @@ import NotificationMessage from './components/NotificationMessage'
 import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
 import Users from './components/Users'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Link,
+  Navigate,
+} from 'react-router-dom'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
+
+  const padding = {
+    padding: 5,
+  }
 
   // Retrieves blogs on the first page load and puts them in redux
   useEffect(() => {
@@ -72,10 +83,31 @@ const App = () => {
   }
 
   return (
-    <div>
+    <Router>
       <NotificationMessage />
+      <div>
+        <Link style={padding} to="/">
+          home
+        </Link>
+        <Link style={padding} to="/blogs">
+          blogs
+        </Link>
+        <Link style={padding} to="/users">
+          users
+        </Link>
+      </div>
 
-      {!user && (
+      <Routes>
+      <Route path="/" element={user ? <Navigate to="/blogs" /> : <LoginForm handleLogin={handleLogin} username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword} />} />
+
+        <Route path="/blogs" element={user ? <Bloglist /> : <Navigate to="/" />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+
+      {/* {!user && (
         <LoginForm
           handleLogin={handleLogin}
           username={username}
@@ -85,9 +117,9 @@ const App = () => {
         />
       )}
 
-      {user && <Bloglist />}
-      <Users />
-    </div>
+      {user && <Bloglist />} */}
+      {/* <Users /> */}
+    </Router>
   )
 }
 
