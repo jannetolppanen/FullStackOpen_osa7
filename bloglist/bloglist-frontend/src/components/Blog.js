@@ -78,31 +78,6 @@ const Blog = () => {
       })
   }
 
-  // Shows more info about the blog
-  // const fullInfo = () => {
-  //   return (
-  //     <>
-  //       {blog.url}
-  //       <br />
-  //       likes {blog.likes}{' '}
-  //       <button onClick={handleLike} id="like-button">
-  //         like
-  //       </button>{' '}
-  //       <br />
-  //       {blog.user.name}
-  //       <br />
-  //       {isBlogPostOwner() && (
-  //         <button
-  //           style={removeButtonStyle}
-  //           onClick={handleRemove}
-  //           id="remove-button"
-  //         >
-  //           remove
-  //         </button>
-  //       )}
-  //     </>
-  //   )
-  // }
 
 if (!blog) {
   return null
@@ -127,8 +102,14 @@ if (!blog) {
             id="remove-button"
           >
             remove
-          </button>
+          </button>          
         )}
+        <h2>comments</h2>
+        <ul>
+        {blog.comments.map((comment) => (
+          <li key={comment._id}>{comment.content}</li>
+        ))}
+        </ul>
 
 
     </div>

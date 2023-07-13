@@ -29,9 +29,7 @@ const App = () => {
   const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
 
-  const padding = {
-    padding: 5,
-  }
+
 
   // Retrieves blogs on the first page load and puts them in redux
   useEffect(() => {
@@ -91,15 +89,7 @@ const App = () => {
     <Router>
       <NotificationMessage />
       <NavBar />
-      {/* <div>
-        <Link style={padding} to="/blogs">
-          blogs
-        </Link>
-        <Link style={padding} to="/users">
-          users
-        </Link>
-      </div>
-      <LoginInformation /> */}
+      <h2>blog app</h2>
 
       <Routes>
 
