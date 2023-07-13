@@ -11,6 +11,7 @@ import NotificationMessage from './components/NotificationMessage'
 import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
 import Users from './components/Users'
+import LoginInformation from './components/LoginInformation'
 import {
   BrowserRouter as Router,
   Routes,
@@ -82,6 +83,7 @@ const App = () => {
       }, 5000)
     }
   }
+  
 
   return (
     <Router>
@@ -97,6 +99,7 @@ const App = () => {
           users
         </Link>
       </div>
+      <LoginInformation />
 
       <Routes>
 

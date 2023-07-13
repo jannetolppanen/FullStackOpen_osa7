@@ -1,5 +1,5 @@
 import Togglable from "./Togglable"
-import Logoutbutton from "./LogoutButton"
+// import Logoutbutton from "./LogoutButton"
 import CreateBlogForm from "./CreateBlogForm"
 import Blog from "./Blog"
 import { useSelector, useDispatch } from "react-redux"
@@ -14,19 +14,19 @@ const Bloglist = () => {
   const dispatch = useDispatch()
 
     // Empties login info from localStorage and removes user
-    const handleLogout = () => {
-      window.localStorage.removeItem('loggedBlogappUser')
-      dispatch(logout())
-      dispatch(
-        create({
-          text: `Logged out succesfully`,
-          color: 'grey',
-        })
-      )
-      setTimeout(() => {
-        dispatch(remove())
-      }, 5000)
-    }
+    // const handleLogout = () => {
+    //   window.localStorage.removeItem('loggedBlogappUser')
+    //   dispatch(logout())
+    //   dispatch(
+    //     create({
+    //       text: `Logged out succesfully`,
+    //       color: 'grey',
+    //     })
+    //   )
+    //   setTimeout(() => {
+    //     dispatch(remove())
+    //   }, 5000)
+    // }
 
       // Reference to Togglable
   const blogFormRef = useRef()
@@ -34,12 +34,12 @@ const Bloglist = () => {
   return (
     <div>
                 <div>
-            <h2>blogs</h2>
+            {/* <h2>blogs</h2>
             {
               <p>
                 {user.name} logged in <Logoutbutton onLogout={handleLogout} />
               </p>
-            }
+            } */}
             <Togglable buttonLabel="create new blog" ref={blogFormRef}>
               <CreateBlogForm
                 blogs={blogs}
