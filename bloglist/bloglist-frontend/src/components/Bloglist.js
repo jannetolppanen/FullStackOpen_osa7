@@ -1,16 +1,16 @@
 import Togglable from "./Togglable"
 import Logoutbutton from "./LogoutButton"
-import CreateBlogFormRedux from "./CreateBlogFormRedux"
-import BlogRedux from "./BlogRedux"
+import CreateBlogForm from "./CreateBlogForm"
+import Blog from "./Blog"
 import { useSelector, useDispatch } from "react-redux"
 import { useRef } from "react"
-import { logout } from "../reducers/UserSlice"
+import { logout } from "../reducers/LoginSlice"
 import { create, remove } from "../reducers/NotificationSlice"
 
 
 const Bloglist = () => {
   const blogs = useSelector(state => state.blogs)
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
 
     // Empties login info from localStorage and removes user
@@ -41,14 +41,12 @@ const Bloglist = () => {
               </p>
             }
             <Togglable buttonLabel="create new blog" ref={blogFormRef}>
-              <CreateBlogFormRedux
-                // handleCreateNewBlog={handleCreateNewBlog}
+              <CreateBlogForm
                 blogs={blogs}
-                // addBlogRedux={addBlogRedux}
               />
             </Togglable>
             {blogs.map((blog) => (
-              <BlogRedux key={blog.id} blog={blog} blogs={blogs} />
+              <Blog key={blog.id} blog={blog} blogs={blogs} />
             ))}
           </div>
     </div>

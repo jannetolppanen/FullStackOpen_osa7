@@ -3,9 +3,9 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addLike, removeBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 
-const BlogRedux = ({ blog }) => {
+const Blog = ({ blog }) => {
   const [visible, setVisible] = useState(false)
-  const user = useSelector(state => state.user)
+  const user = useSelector(state => state.login)
   const dispatch = useDispatch()
 
   // Blog css style
@@ -15,7 +15,6 @@ const BlogRedux = ({ blog }) => {
     border: 'solid',
     borderWidth: 1,
     marginBottom: 5,
-    backgroundColor: 'lightblue',
   }
 
   const removeButtonStyle = {
@@ -108,4 +107,4 @@ const BlogRedux = ({ blog }) => {
   )
 }
 
-export default BlogRedux
+export default Blog

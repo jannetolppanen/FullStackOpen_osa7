@@ -5,7 +5,7 @@ import { setAllBlogs, createNewBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 
 
-const CreateBlogFormRedux = () => {
+const CreateBlogForm = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
@@ -27,7 +27,7 @@ const CreateBlogFormRedux = () => {
       author: author,
       url: url,
     }
-    addBlogRedux(blogObject)
+    addBlog(blogObject)
     setTitle('')
     setAuthor('')
     setUrl('')
@@ -44,7 +44,7 @@ const CreateBlogFormRedux = () => {
   }
 
       // Adds new blogs to redux
-      const addBlogRedux = async (blogObject) => {
+      const addBlog = async (blogObject) => {
         try {
           blogService.create(blogObject).then((result) => {
             dispatch(createNewBlog(result))
@@ -66,10 +66,10 @@ const CreateBlogFormRedux = () => {
 
   return (
     <>
-      <div style={{ backgroundColor: 'lightblue' }}>
+      <div>
         <form onSubmit={newBlog}>
           <div>
-            <h2>create new redux blog</h2>
+            <h2>create new blog</h2>
             title:
             <input
               type="text"
@@ -114,4 +114,4 @@ const CreateBlogFormRedux = () => {
   )
 }
 
-export default CreateBlogFormRedux
+export default CreateBlogForm

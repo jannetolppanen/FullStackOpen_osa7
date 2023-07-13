@@ -1,29 +1,27 @@
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import LoginForm from './components/LoginForm'
-import Logoutbutton from './components/LogoutButton'
-import CreateBlogFormRedux from './components/CreateBlogFormRedux'
-import Togglable from './components/Togglable'
 import blogService from './services/blogs'
+import userService from './services/users'
 import loginService from './services/login'
 import { create, remove } from './reducers/NotificationSlice'
-import { login, logout } from './reducers/UserSlice'
-import { setAllBlogs, createNewBlog } from './reducers/BlogsSlice'
+import { login, logout } from './reducers/LoginSlice'
+import { setAllBlogs } from './reducers/BlogsSlice'
+import { setUsers } from './reducers/UserSlice'
 import NotificationMessage from './components/NotificationMessage'
-import BlogRedux from './components/BlogRedux'
-import Users from './components/Users'
+import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
+import Users from './components/Users'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const user = useSelector((state) => state.user)
+  const user = useSelector((state) => state.login)
   const dispatch = useDispatch()
-  const blogsFromRedux = useSelector((state) => state.blogs)
 
   // Retrieves blogs on the first page load and puts them in redux
   useEffect(() => {
     blogService.getAll().then((blogs) => dispatch(setAllBlogs(blogs)))
+    userService.getAll().then((users) => dispatch(setUsers(users)))
   }, [])
 
   // Checks if localStorage already has login info
@@ -74,22 +72,22 @@ const App = () => {
   }
 
   return (
-      <div>
+    <div>
+      <NotificationMessage />
 
-        <NotificationMessage />
+      {!user && (
+        <LoginForm
+          handleLogin={handleLogin}
+          username={username}
+          setUsername={setUsername}
+          password={password}
+          setPassword={setPassword}
+        />
+      )}
 
-        {!user && (
-          <LoginForm
-            handleLogin={handleLogin}
-            username={username}
-            setUsername={setUsername}
-            password={password}
-            setPassword={setPassword}
-          />
-        )}
-
-        {user && ( <Bloglist />  )}
-      </div>
+      {user && <Bloglist />}
+      <Users />
+    </div>
   )
 }
 
