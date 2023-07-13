@@ -22,6 +22,7 @@ import {
 } from 'react-router-dom'
 import User from './components/User'
 import NavBar from './components/NavBar'
+import { Container } from '@mui/material'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -86,6 +87,7 @@ const App = () => {
   
 
   return (
+    <Container>
     <Router>
       <NotificationMessage />
       <NavBar />
@@ -120,6 +122,7 @@ const App = () => {
         <Route path="/blogs/:id" element={<Blog />} />
       </Routes>
     </Router>
+    </Container>
   )
 }
 
