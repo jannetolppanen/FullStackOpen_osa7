@@ -18,6 +18,7 @@ import {
   Link,
   Navigate,
 } from 'react-router-dom'
+import User from './components/User'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -98,27 +99,32 @@ const App = () => {
       </div>
 
       <Routes>
-      <Route path="/" element={user ? <Navigate to="/blogs" /> : <LoginForm handleLogin={handleLogin} username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword} />} />
 
-        <Route path="/blogs" element={user ? <Bloglist /> : <Navigate to="/" />} />
-        <Route path="/users" element={<Users />} />
-      </Routes>
-
-      {/* {!user && (
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
+        <Route
+          path="/"
+          element={
+            user ? (
+              <Navigate to="/blogs" />
+            ) : (
+              <LoginForm
+                handleLogin={handleLogin}
+                username={username}
+                setUsername={setUsername}
+                password={password}
+                setPassword={setPassword}
+              />
+            )
+          }
         />
-      )}
 
-      {user && <Bloglist />} */}
-      {/* <Users /> */}
+        <Route
+          path="/blogs"
+          element={user ? <Bloglist /> : <Navigate to="/" />}
+        />
+
+        <Route path="/users" element={<Users />} />
+        <Route path="/users/:id" element={<User />} />
+      </Routes>
     </Router>
   )
 }
