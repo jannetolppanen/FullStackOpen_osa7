@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { create, remove } from '../reducers/NotificationSlice'
 import { setAllBlogs, createNewBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
+import { Button, TextField } from '@mui/material'
 
 
 const CreateBlogForm = () => {
@@ -70,8 +71,8 @@ const CreateBlogForm = () => {
         <form onSubmit={newBlog}>
           <div>
             <h2>create new blog</h2>
-            title:
-            <input
+            <TextField
+            label="title"
               type="text"
               value={title}
               name="Title"
@@ -82,8 +83,8 @@ const CreateBlogForm = () => {
           </div>
 
           <div>
-            author:
-            <input
+            <TextField
+            label="author"
               type="text"
               value={author}
               name="Author"
@@ -94,8 +95,8 @@ const CreateBlogForm = () => {
           </div>
 
           <div>
-            url:
-            <input
+            <TextField
+            label="url"
               type="text"
               value={url}
               name="Url"
@@ -105,9 +106,9 @@ const CreateBlogForm = () => {
             />
           </div>
 
-          <button type="submit" data-testid="submitButton" id="submit-button">
+          <Button variant="contained" color="primary" type="submit" data-testid="submitButton" id="submit-button">
             create
-          </button>
+          </Button>
         </form>
       </div>
     </>

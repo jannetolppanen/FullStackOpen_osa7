@@ -1,9 +1,11 @@
+import { Button } from "@mui/material";
+
 const Logoutbutton = ({ onLogout }) => {
   return (
     <>
-      <button onClick={onLogout} id="logout-button">
+      <Button variant="contained" color="secondary" onClick={onLogout} id="logout-button">
         Logout
-      </button>
+      </Button>
     </>
   );
 };

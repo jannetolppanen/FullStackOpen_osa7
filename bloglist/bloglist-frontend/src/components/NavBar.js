@@ -1,33 +1,29 @@
-import { Link } from "react-router-dom"
-import LoginInformation from "./LoginInformation"
+import { Link } from 'react-router-dom'
+import LoginInformation from './LoginInformation'
 
-const NavBar = () => {
+import * as React from 'react'
+import AppBar from '@mui/material/AppBar'
+import Toolbar from '@mui/material/Toolbar'
 
+
+export default function NavBar() {
   const padding = {
-    padding: 5,
-  }
-
-  const containerStyle = {
-    display: "flex",
-    alignItems: "center",
-    gap: "10px",
-    backgroundColor: "#CEFDFF",
-    margin: "0px 0px 15px 0px"
-
-
-
+    padding: '10px',
   }
   return (
-    <div style={containerStyle}>
-      <Link to="/blogs">
-        blogs
-      </Link>
-      <Link to="/users">
-        users
-      </Link>
-      <LoginInformation />
+    <div>
+      <AppBar position="fixed">
+        <Toolbar>
+          <Link to="/blogs" style={padding}>
+            blogs
+          </Link>
+          <Link to="/users" style={padding}>
+            users
+          </Link>
+          <LoginInformation />
+        </Toolbar>
+      </AppBar>
+      <Toolbar />
     </div>
   )
 }
-
-export default NavBar

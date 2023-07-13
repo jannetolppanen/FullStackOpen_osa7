@@ -7,6 +7,15 @@ import { useRef } from 'react'
 import { logout } from '../reducers/LoginSlice'
 import { create, remove } from '../reducers/NotificationSlice'
 import { Link } from 'react-router-dom'
+import {
+  Container,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Paper,
+} from '@mui/material'
 
 const Bloglist = () => {
   const blogs = useSelector((state) => state.blogs)
@@ -28,14 +37,25 @@ const Bloglist = () => {
         <Togglable buttonLabel="create new blog" ref={blogFormRef}>
           <CreateBlogForm blogs={blogs} />
         </Togglable>
-        {blogs.map((blog) => (
-          // <Blog key={blog.id} blog={blog} blogs={blogs} />
-          <div style={blogStyle} key={blog.id}>
-            <Link to={`/blogs/${blog.id}`}>
-              {blog.title} by {blog.author}
-            </Link>
-          </div>
-        ))}
+
+        <TableContainer component={Paper}>
+          <Table>
+            <TableBody>
+              {blogs.map((blog) => (
+                <TableRow key={blog.id}>
+                  <TableCell>
+                    <Link to={`/blogs/${blog.id}`}>
+                      {blog.title}
+                    </Link>
+                  </TableCell>
+                  <TableCell>
+                    {blog.author}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </div>
     </div>
   )

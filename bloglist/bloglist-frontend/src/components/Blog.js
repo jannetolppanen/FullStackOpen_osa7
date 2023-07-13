@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { addLike, removeBlog, addComment } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Button, TextField } from '@mui/material'
 
 const Blog = () => {
   const [visible, setVisible] = useState(false)
@@ -103,9 +104,9 @@ if (!blog) {
       <a href={blog.url}>{blog.url}</a>
         <br />
         likes {blog.likes}{' '}
-        <button onClick={handleLike} id="like-button">
+        <Button variant="contained" color="primary" onClick={handleLike} id="like-button">
           like
-        </button>{' '}
+        </Button>{' '}
         <br />
         Added by {blog.user.name}
         <br />
@@ -126,8 +127,8 @@ if (!blog) {
         </ul>
 
         <form onSubmit={submitComment}>
-          <input type="text" value={comment} onChange={handleCommentChange} placeholder='Give a comment' />
-          <button type='submit'>add comment</button>
+          <TextField type="text" value={comment} onChange={handleCommentChange} placeholder='Give a comment' />
+          <Button variant="contained" color="primary" type='submit'>add comment</Button>
         </form>
 
 
