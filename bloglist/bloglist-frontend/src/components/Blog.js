@@ -2,11 +2,19 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { addLike, removeBlog } from '../reducers/BlogsSlice'
 import blogService from '../services/blogs'
+import { useParams, useNavigate } from 'react-router-dom'
 
-const Blog = ({ blog }) => {
+const Blog = () => {
   const [visible, setVisible] = useState(false)
   const user = useSelector(state => state.login)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const { id } = useParams()
+  const blogs = useSelector(state => state.blogs)
+
+  // Find the exact user
+  const blog = blogs.find(user => user.id === id)
 
   // Blog css style
   const blogStyle = {
@@ -39,8 +47,9 @@ const Blog = ({ blog }) => {
   // Removes blogpost
   const removeBlogPost = (id) => {
     blogService.remove(id, user.token).then(() => {
-      // setBlogs(blogs.filter((blog) => blog.id !== id))
       dispatch(removeBlog({id}))
+      navigate("/blogs")
+
     })
   }
 
@@ -70,17 +79,46 @@ const Blog = ({ blog }) => {
   }
 
   // Shows more info about the blog
-  const fullInfo = () => {
-    return (
-      <>
-        {blog.url}
+  // const fullInfo = () => {
+  //   return (
+  //     <>
+  //       {blog.url}
+  //       <br />
+  //       likes {blog.likes}{' '}
+  //       <button onClick={handleLike} id="like-button">
+  //         like
+  //       </button>{' '}
+  //       <br />
+  //       {blog.user.name}
+  //       <br />
+  //       {isBlogPostOwner() && (
+  //         <button
+  //           style={removeButtonStyle}
+  //           onClick={handleRemove}
+  //           id="remove-button"
+  //         >
+  //           remove
+  //         </button>
+  //       )}
+  //     </>
+  //   )
+  // }
+
+if (!blog) {
+  return null
+}
+
+  return (
+    <div className="blog">
+      <h2>{blog.title} {blog.author}</h2>
+      {blog.url}
         <br />
         likes {blog.likes}{' '}
         <button onClick={handleLike} id="like-button">
           like
         </button>{' '}
         <br />
-        {blog.user.name}
+        Added by {blog.user.name}
         <br />
         {isBlogPostOwner() && (
           <button
@@ -91,18 +129,8 @@ const Blog = ({ blog }) => {
             remove
           </button>
         )}
-      </>
-    )
-  }
 
-  return (
-    <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}{' '}
-      <button onClick={handleView} id="view-button">
-        view
-      </button>{' '}
-      <br />
-      {visible && fullInfo()}
+
     </div>
   )
 }

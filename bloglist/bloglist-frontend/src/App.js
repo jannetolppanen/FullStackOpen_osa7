@@ -12,6 +12,7 @@ import LoginForm from './components/LoginForm'
 import Bloglist from './components/Bloglist'
 import Users from './components/Users'
 import LoginInformation from './components/LoginInformation'
+import Blog from './components/Blog'
 import {
   BrowserRouter as Router,
   Routes,
@@ -20,6 +21,7 @@ import {
   Navigate,
 } from 'react-router-dom'
 import User from './components/User'
+import NavBar from './components/NavBar'
 
 const App = () => {
   const [username, setUsername] = useState('')
@@ -88,10 +90,8 @@ const App = () => {
   return (
     <Router>
       <NotificationMessage />
-      <div>
-        <Link style={padding} to="/">
-          home
-        </Link>
+      <NavBar />
+      {/* <div>
         <Link style={padding} to="/blogs">
           blogs
         </Link>
@@ -99,7 +99,7 @@ const App = () => {
           users
         </Link>
       </div>
-      <LoginInformation />
+      <LoginInformation /> */}
 
       <Routes>
 
@@ -127,6 +127,7 @@ const App = () => {
 
         <Route path="/users" element={<Users />} />
         <Route path="/users/:id" element={<User />} />
+        <Route path="/blogs/:id" element={<Blog />} />
       </Routes>
     </Router>
   )
