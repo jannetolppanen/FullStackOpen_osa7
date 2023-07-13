@@ -1,13 +1,23 @@
-import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useState, useRef } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { create, remove } from '../reducers/NotificationSlice'
+import { setAllBlogs, createNewBlog } from '../reducers/BlogsSlice'
+import blogService from '../services/blogs'
 
 
-const CreateBlogFormRedux = ({ addBlogRedux }) => {
+const CreateBlogFormRedux = () => {
   const [title, setTitle] = useState('')
   const [author, setAuthor] = useState('')
   const [url, setUrl] = useState('')
   const dispatch = useDispatch()
+  const blogs = useSelector(state => state.blogs)
+
+  // Reference to Togglable
+  const blogFormRef = useRef()
+
+  const handleCreateNewBlog = () => {
+    blogFormRef.current.toggleVisibility()
+  }
 
   const newBlog = (event) => {
     event.preventDefault()
@@ -33,9 +43,30 @@ const CreateBlogFormRedux = ({ addBlogRedux }) => {
     }, 5000)
   }
 
+      // Adds new blogs to redux
+      const addBlogRedux = async (blogObject) => {
+        try {
+          blogService.create(blogObject).then((result) => {
+            dispatch(createNewBlog(result))
+          })
+        } catch (error) {
+          if (error.response && error.response.status === 400) {
+            dispatch(
+              create({
+                text: 'Error, bad request',
+                color: 'red',
+              })
+            )
+            setTimeout(() => {
+              dispatch(remove())
+            }, 5000)
+          }
+        }
+      }
+
   return (
     <>
-      <div style={{backgroundColor: 'lightblue'}}>
+      <div style={{ backgroundColor: 'lightblue' }}>
         <form onSubmit={newBlog}>
           <div>
             <h2>create new redux blog</h2>

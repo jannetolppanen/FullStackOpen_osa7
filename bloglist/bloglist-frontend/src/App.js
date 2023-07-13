@@ -11,11 +11,13 @@ import { login, logout } from './reducers/UserSlice'
 import { setAllBlogs, createNewBlog } from './reducers/BlogsSlice'
 import NotificationMessage from './components/NotificationMessage'
 import BlogRedux from './components/BlogRedux'
+import Users from './components/Users'
+import Bloglist from './components/Bloglist'
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const user = useSelector(state => state.user)
+  const user = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const blogsFromRedux = useSelector((state) => state.blogs)
 
@@ -33,28 +35,6 @@ const App = () => {
       dispatch(login(user))
     }
   }, [])
-
-  // Empties login info from localStorage and removes user
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    dispatch(logout())
-    dispatch(
-      create({
-        text: `Logged out succesfully`,
-        color: 'grey',
-      })
-    )
-    setTimeout(() => {
-      dispatch(remove())
-    }, 5000)
-  }
-
-  // Reference to Togglable
-  const blogFormRef = useRef()
-  // Closes blog creation form when new blog is submitted using blogFormRef
-  const handleCreateNewBlog = () => {
-    blogFormRef.current.toggleVisibility()
-  }
 
   // Login handler
   const handleLogin = async (event) => {
@@ -93,82 +73,23 @@ const App = () => {
     }
   }
 
-    // Adds new blogs to redux
-    const addBlogRedux = async (blogObject) => {
-      try {
-        blogService.create(blogObject)
-        .then(result => {
-          console.log('result: ',result)
-          dispatch(createNewBlog(result))
-        })        
-      } catch (error) {
-        if (error.response && error.response.status === 400) {
-          dispatch(
-            create({
-              text: 'Error, bad request',
-              color: 'red',
-            })
-          )
-          setTimeout(() => {
-            dispatch(remove())
-          }, 5000)
-        }
-      }
-    }
-
   return (
-    <div>
-      <NotificationMessage />
+      <div>
 
-      {!user && (
-        <LoginForm
-          handleLogin={handleLogin}
-          username={username}
-          setUsername={setUsername}
-          password={password}
-          setPassword={setPassword}
-        />
-      )}
+        <NotificationMessage />
 
-      {user && (
-        <div>
-          <h2>blogs</h2>
-          <p
-            style={{
-              backgroundColor: 'green',
-              padding: '10px',
-              color: 'white',
-            }}
-          >
-            Remember this is a new branch and needs to be merged if it works
-          </p>{' '}
-          {
-            <p>
-              {user.name} logged in <Logoutbutton onLogout={handleLogout} />
-            </p>
-          }
+        {!user && (
+          <LoginForm
+            handleLogin={handleLogin}
+            username={username}
+            setUsername={setUsername}
+            password={password}
+            setPassword={setPassword}
+          />
+        )}
 
-
-          <Togglable buttonLabel="create new blog redux" ref={blogFormRef}>
-            <CreateBlogFormRedux
-              handleCreateNewBlog={handleCreateNewBlog}
-              blogs={blogsFromRedux}
-              addBlogRedux={addBlogRedux}
-            />
-          </Togglable>
-
-          {blogsFromRedux
-            .map((blog) => (
-              <BlogRedux
-                key={blog.id}
-                blog={blog}
-                blogs={blogsFromRedux}
-              />
-            ))}
-
-        </div>
-      )}
-    </div>
+        {user && ( <Bloglist />  )}
+      </div>
   )
 }
 
